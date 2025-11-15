@@ -1,180 +1,192 @@
-**📦 E-Commerce Customer Churn Analysis**
+# E-Commerce Customer Churn Analysis
 
-A complete SQL-based project for cleaning, transforming, and analyzing customer churn behavior in an e-commerce environment.
+## 📌 Project Overview
 
-**📝 Project Overview**
+Customer churn is a major concern for e-commerce platforms. This project analyzes churn behavior using historical transactional and behavioral data. It evaluates demographics, order patterns, payment preferences, complaints, and satisfaction to uncover key churn drivers and actionable retention strategies.
 
-Customer churn is a critical challenge for e-commerce platforms. This project analyzes churn behavior using transactional and behavioral customer data. Various attributes—demographics, order history, satisfaction score, complaints, payment methods, and distance—are explored to identify patterns that drive customer churn.
+## 🎯 Objectives
 
-The goal is to uncover actionable insights to strengthen customer retention strategies.
+* Clean and prepare the dataset for analysis.
+* Handle missing values, inconsistencies, and outliers.
+* Transform and standardize data (new columns, renaming, categorization).
+* Analyze customer churn behavior, payment preferences, complaints, and category choices.
+* Perform dataset-wide EDA using SQL.
+* Create and integrate additional tables (like `customer_returns`).
+* Generate insights for business decision-making.
 
-**🎯 Objectives**
+## 🧰 Tools & Technologies Used
 
-Clean and prepare raw customer data.
+* **MySQL / SQL Workbench** for cleaning, transformation, and analysis.
+* **E-Commerce Database** containing `customer_churn` and `customer_returns` tables.
+* SQL techniques such as: joins, CASE statements, aggregations, nested queries, and conditional logic.
 
-Handle missing values, outliers, and inconsistent entries.
+## 📁 Key SQL Operations Used
 
-Perform data transformation & feature engineering.
+* `UPDATE` with subqueries
+* `CASE` statements
+* `GROUP BY` + aggregates
+* `ORDER BY`
+* Subqueries for average-based filtering
+* Conditional aggregations
+* Table joins (inner + left joins)
 
-Conduct Exploratory Data Analysis (EDA) using SQL.
+## 🔁 Project Workflow
 
-Create and join auxiliary tables (e.g., customer returns).
+1. **Data Import** – Load the CSV into MySQL.
+2. **Data Cleaning** – Fix missing values, outliers, and inconsistencies.
+3. **Data Transformation** – New fields & standardized columns.
+4. **EDA (Exploratory Data Analysis)** – Run SQL analytical queries.
+5. **Feature Engineering** – Distance segmentation, churn labels.
+6. **Table Creation & Joins** – Create `customer_returns` table and join it.
+7. **Insights & Reporting** – Identify churn drivers and retention strategies.
 
-Generate churn insights and recommendations.
+---
 
-**🧰 Tools & Technologies**
-Tool / Technology	Purpose
-MySQL / SQL Workbench	Data cleaning, transformations, SQL queries
-ecomm Database	Storage for customer_churn & customer_returns tables
-SQL Joins, CASE, Aggregations	Analytical insights
-Subqueries & Nested Queries	Advanced filtering & metrics
-**🧹 Step 1: Data Cleaning
-✔ 1.1 Handling Missing Values**
+## 🧹 Step 1: Data Cleaning
 
-Mean Imputation
+### **1.1 Handling Missing Values**
 
-WarehouseToHome
+**Mean Imputation (rounded)** for:
 
-HoursSpentOnApp
+* WarehouseToHome
+* HoursSpentOnApp
+* OrderAmountHikeFromlastYear
+* DaySinceLastOrder
 
-OrderAmountHikeFromlastYear
+**Mode Imputation** for:
 
-DaySinceLastOrder
+* Tenure
+* CouponUsed
+* OrderCount
 
-Mode Imputation
+### **1.2 Handling Outliers**
 
-Tenure
+* Removed rows where `WarehouseToHome > 100` using `CustomerID` for controlled deletion.
 
-CouponUsed
+---
 
-OrderCount
+## 🔄 Step 2: Data Standardization
 
-**✔ 1.2 Handling Outliers**
+### **2.1 Replacing inconsistent values**
 
-Removed WarehouseToHome > 100 km using CustomerID for safe deletion.
+* `Phone` → `Mobile Phone`
+* `Mobile` → `Mobile Phone`
 
-**🔄 Step 2: Data Standardization**
+### **2.2 Standardizing Payment Mode**
 
-Phone → Mobile Phone
+* `COD` → `Cash on Delivery`
+* `CC` → `Credit Card`
 
-Mobile → Mobile Phone
+### **2.3 Renaming Columns**
 
-COD → Cash on Delivery
+* `PreferedOrderCat` → `PreferredOrderCat`
+* `HourSpendOnApp` → `HoursSpentOnApp`
 
-CC → Credit Card
+---
 
-**Column Renaming**
+## 🏗 Step 3: Feature Engineering
 
-PreferedOrderCat → PreferredOrderCat
+### **3.1 New Columns Created**
 
-HourSpendOnApp → HoursSpentOnApp
+* `ComplaintReceived` → Yes/No based on complaint flag
+* `ChurnStatus` → Churned/Active
 
-**🏗 Step 3: Feature Engineering**
-✔ New Columns Added
-1. ComplaintReceived
-CASE WHEN complain = 1 THEN 'Yes' ELSE 'No' END
+### **3.2 Distance Segmentation (CASE)**
 
-2. ChurnStatus
-CASE WHEN churn = 1 THEN 'Churned' ELSE 'Active' END
+* Very Close Distance (<=5 km)
+* Close Distance (<=10 km)
+* Moderate Distance (<=15 km)
+* Far Distance (>15 km)
 
-3. Distance Segmentation
-CASE
-  WHEN WarehouseToHome <= 5 THEN 'Very Close Distance'
-  WHEN WarehouseToHome <= 10 THEN 'Close Distance'
-  WHEN WarehouseToHome <= 15 THEN 'Moderate Distance'
-  ELSE 'Far Distance'
-END
+---
 
-**📊 Step 4: Exploratory Data Analysis (SQL)**
+## 📊 Step 4: Exploratory Data Analysis (SQL Queries)
 
-The project covers:
+### ✔ **Churn Analysis**
 
-✔ Churn Insights
+* Churned vs active customer count
+* % of churned customers who complained
+* Churn breakdown by distance category
 
-Churn count & percentage
+### ✔ **Customer Behavior Insights**
 
-Complaints among churned customers
+* Avg tenure & cashback for churned customers
+* Most preferred payment mode among active users
+* Gender distribution of complaining customers
+* City tier with highest customer count
+* Category preference for high-coupon users (>5 coupons)
 
-Churn by distance segment
+### ✔ **Category & Order Insights**
 
-✔ Behavioral Insights
+* Top 3 categories by average cashback
+* Customers whose order count > overall average
+* Preferred category for mobile phone users
 
-Average tenure & cashback by churn status
+### ✔ **Device & Satisfaction Insights**
 
-Preferred payment method of active users
+* Avg devices registered by UPI users
+* Avg satisfaction score among customers who complained
 
-Gender distribution of customers who complained
+---
 
-City tier analysis
+## 🗃 Step 5: Additional Tables
 
-✔ Category & Ordering Insights
+### **Customer Returns Table**
 
-Top 3 categories with highest average cashback
+A separate table `customer_returns` was created in the e-commerce database to store return histories.
 
-Customers with above-average order count
+### **Joining Churn & Return Data**
 
-Category preference among mobile-phone shoppers
+Useful to extract:
 
-✔ Device & Satisfaction Insights
+* Churned customers
+* Who also complained
+* Who also returned products
 
-Avg registered devices for UPI users
+---
 
-Avg satisfaction score of complaining customers
+## 📝 SQL Code Samples
 
-**🗃 Step 5: Additional Tables**
-✔ Created customer_returns Table
+### **1. Handling Missing Values**
 
-Contains return behavior details per customer.
-
-✔ Joined With Churn Data
-
-Combined churn + complaint + return data using:
-
-SELECT cc.*, cr.*
-FROM customer_churn cc
-JOIN customer_returns cr 
-     ON cc.CustomerID = cr.CustomerID;
-
-**🧪 Sample SQL Snippets**
-1. Handling Missing Values
+```sql
 UPDATE customer_churn
 SET HoursSpentOnApp = (
-    SELECT ROUND(AVG(HoursSpentOnApp)) 
-    FROM customer_churn
+    SELECT ROUND(AVG(HoursSpentOnApp)) FROM customer_churn
 )
 WHERE HoursSpentOnApp IS NULL;
+```
 
-2. Categorization Using CASE
+### **2. Categorizing Data**
+
+```sql
 CASE
-  WHEN WarehouseToHome <= 5 THEN 'Very Close Distance'
-  WHEN WarehouseToHome <= 10 THEN 'Close Distance'
-  WHEN WarehouseToHome <= 15 THEN 'Moderate Distance'
-  ELSE 'Far Distance'
+    WHEN WarehouseToHome <= 5 THEN 'Very Close Distance'
+    WHEN WarehouseToHome <= 10 THEN 'Close Distance'
+    WHEN WarehouseToHome <= 15 THEN 'Moderate Distance'
+    ELSE 'Far Distance'
 END
+```
 
-3. Joining Customer + Returns
+### **3. Joining Tables**
+
+```sql
 SELECT cc.*, cr.*
 FROM customer_churn cc
-JOIN customer_returns cr 
-  ON cc.CustomerID = cr.CustomerID;
+JOIN customer_returns cr
+ON cc.CustomerID = cr.CustomerID;
+```
 
-**📌 Conclusion Summary**
+---
 
-This project demonstrates a complete SQL-driven approach to churn analysis, covering:
+## 📌 Conclusion
 
-Data cleaning & transformations
+This project showcases a full SQL-based churn analytics workflow — from cleaning and transformation to deep behavioral and churn analysis. The insights help identify:
 
-Feature engineering
+* Major churn drivers
+* Complaint and satisfaction patterns
+* Preferred categories & payment modes
+* City-tier distribution
+* High-value customer segments
 
-Exploratory analysis
-
-Joins with additional tables
-
-Insight generation for business decision-making
-
-**⭐The insights:**
-✔ Key churn drivers
-✔ Complaint & satisfaction patterns
-✔ Preferred categories & payment methods
-✔ High-value and at-risk customer segments
-
+It demonstrates strong command of SQL querying, dataset preparation, segmentation logic, and analytical reporting.
